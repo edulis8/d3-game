@@ -2,7 +2,7 @@
 var dragmove = function(d) {
     d3.select(this)
       .attr("cy", ((d3.event.sourceEvent.pageY) - this.offsetHeight/2 - 70)+"px")
-      .attr("cx", ((d3.event.sourceEvent.pageX) - this.offsetWidth/2)+"px")
+      .attr("cx", ((d3.event.sourceEvent.pageX) - this.offsetWidth/2)+"px");
 };
 
 var drag = d3.behavior.drag().on("drag", dragmove);
@@ -38,30 +38,38 @@ var randomizeEnemies = function(){
           var playerCoord = [parseFloat(player.attr('cx')), parseFloat(player.attr('cy'))];
           if(euclid(enemyCoord, playerCoord) < 40){
             //reset score
+            if(currentScore > highScore){
+              highScore = currentScore;
+              d3.select(".high span").text(highScore);
+            } 
+            collisions++;
+            d3.select(".collisions span").text(collisions);
+            d3.select(".current span").text(0);
+            currentScore = 0;
             d3.select("body").transition().duration(100).style({"background": "red"});
           }
            d3.select("body").style({"background": "white"});
 
         };
       }); 
+      //currentScore++;
   }
-  
-setTimeout(randomizeEnemies, 1000);
-}; 
+  setTimeout(randomizeEnemies, 1000);
+};
+var highScore = 0;
+var collisions = 0;
+var currentScore = 0;
+
+
+var increaseScore = function(){
+  currentScore++;
+  d3.select(".current span").text(currentScore);
+};
+setInterval(increaseScore, 50);
 
 randomizeEnemies();
-
-// enemies[0].transition().duration(500).attr("cx", 0).attr("cy", 0).tween('custom', function(){
-//   return function(t){
-//   //console.log(d3.select(this).attr('cx'));
-//   //console.log(player.attr('cx'));
-    
-//   };
-// });
-
-
-       
- var merge = function(array1, array2, callback){     
+      
+var merge = function(array1, array2, callback){     
   var mergedArr = [];    
     for(var i = 0; i < array1.length; i++){
      mergedArr.push(callback(array1[i], array2[i]));
@@ -69,15 +77,15 @@ randomizeEnemies();
     return mergedArr;
 };      
 
- var euclid = function(coords1, coords2){
-  var squaredDeltas = merge(coords1, coords2, function(a,b){
-    return Math.abs((a-b)*(a-b));
-   });
+var euclid = function(coords1, coords2){
+ var squaredDeltas = merge(coords1, coords2, function(a,b){
+   return Math.abs((a-b)*(a-b));
+  });
 
-  var answer = Math.sqrt(squaredDeltas[0] + squaredDeltas[1]);
+var answer = Math.sqrt(squaredDeltas[0] + squaredDeltas[1]);
 
-    return answer;
-  };
+  return answer;
+};
 
 
 
