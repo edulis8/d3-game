@@ -1,5 +1,9 @@
 /* your beautiful css styling goes here! */
-
+.gameBoard {
+  border: 2px solid black;
+  width: 500px;
+  height: 500px;
+}
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 
