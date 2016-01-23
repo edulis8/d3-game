@@ -1,7 +1,17 @@
 // start slingin' some d3 here.
+var dragmove = function(d) {
+    d3.select(this)
+      .attr("cy", ((d3.event.sourceEvent.pageY) - this.offsetHeight/2 - 70)+"px")
+      .attr("cx", ((d3.event.sourceEvent.pageX) - this.offsetWidth/2)+"px")
+};
+
+var drag = d3.behavior.drag().on("drag", dragmove);
+
+
 var height = 500;
 var width = 500;
-d3.select('.gameBoard').append("svg").attr("width", width).attr("height", height).style("background", "ghostwhite").append("circle").attr("cx", 250).attr("cy", 250).attr("r", 20).style("fill", "blue");
+// Player
+d3.select('.gameBoard').append("svg").attr("width", width).attr("height", height).style("background", "ghostwhite").append("circle").attr("cx", 250).attr("cy", 250).attr("r", 20).attr("class", "draggable player").style("fill", "blue").call(drag);
 
 var enemies = [];
 
