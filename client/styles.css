@@ -11,3 +11,15 @@ Feel free to use it if you like. */
 	position: absolute;
 }
 
+.enemy {
+  -webkit-transform: rotate(360deg);
+ -webkit-animation-name:rotate;
+ -webkit-animation-duration: 0.5s;
+ -webkit-animation-iteration-count: infinite;
+ -webkit-animation-timing-function: linear;
+ -webkit-transform-origin: 50% 50%;
+}
+
+text {
+  font: bold 48px monospace;
+}

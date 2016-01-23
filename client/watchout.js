@@ -1,4 +1,7 @@
 // start slingin' some d3 here.
+
+colors = d3.scale.category20();
+
 var dragmove = function(d) {
     d3.select(this)
       .attr("cy", ((d3.event.sourceEvent.pageY) - this.offsetHeight/2 - 70)+"px")
@@ -18,13 +21,25 @@ var enemies = [];
 for(var i = 0; i < 10; i++){
   var cy = Math.random() * height;
   var cx = Math.random() * width;
-  var enemy = d3.select("svg").append("circle").attr("class", "enemy").attr("id", i).attr("cx", cx).attr("cy", cy).attr("r", 20).style("fill", "red");
+  var enemy = d3.select("svg").append("g").append("ellipse").attr("class", "enemy").attr("id", i).attr("cx", cx).attr("cy", cy).attr("rx", 20).attr("ry", 10).style("fill", "red").style("opacity", 0.5);
+
   enemies.push(enemy);
 }
-//enemies[0].transition().duration(500).attr("cx", 0).attr("cy", 0);
-//d3.selectAll(".enemy").transition().duration(500).attr()
+
+d3.selectAll("g").append("text").text("ABC");
+
+
+
+
+
 
 var randomizeEnemies = function(){
+
+//   The Svg rotate transformation takes an optional x,y pair so if you want to rotate 90deg about 10,10 it would be
+// .attr('transform', 'rotate(90, 10, 10)')
+
+// attrTween("transform", function() {
+//       return d3.interpolateString("rotate(0)", "rotate(720)")})
 
    for(var i = 0; i < enemies.length; i++){
     var cy = Math.random() * height;
@@ -32,10 +47,13 @@ var randomizeEnemies = function(){
     enemies[i].transition()
       .duration(500)
       .attr("cx", cx).attr("cy", cy)
+      //.attr("transform", "rotate("+Math.random()*360+")") 
+    
       .tween('custom', function(){
         return function(){
           var enemyCoord = [parseFloat(d3.select(this).attr('cx')), parseFloat(d3.select(this).attr('cy'))];
           var playerCoord = [parseFloat(player.attr('cx')), parseFloat(player.attr('cy'))];
+
           if(euclid(enemyCoord, playerCoord) < 40){
             //reset score
             if(currentScore > highScore){
@@ -46,21 +64,41 @@ var randomizeEnemies = function(){
             d3.select(".collisions span").text(collisions);
             d3.select(".current span").text(0);
             currentScore = 0;
-            d3.select("body").transition().duration(100).style({"background": "red"});
+            d3.select("body").transition().duration(100).style({"background": "lightpink"});
           }
            d3.select("body").style({"background": "white"});
 
         };
-      }); 
-      //currentScore++;
+      }).select("g").attr("transform", "rotate("+Math.random()*360+")");
+      
   }
   setTimeout(randomizeEnemies, 1000);
 };
+
+var colors = ["gray", "fuchsia", "mediumseagreen", "orangered", "orchid", "papayawhip", "lime", "oldlace", "darkkhaki", "teal"];
+var update = function(data){
+  // all enemy nodes will get attach to a piece of data. enemy1 | "gray"
+  var enemies = d3.selectAll(".enemies").data(data, function(d){ return d;});
+
+}
+// For using data:
+// var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+//---
+// 
+//---
+//setInterval(function() {
+//   update(d3.shuffle(colors)
+//       .slice(0, Math.floor(Math.random() * 10));
+// }, 1500);
+
+
+// Global Score Board Vars;
 var highScore = 0;
 var collisions = 0;
 var currentScore = 0;
 
 
+// ScoreBoard
 var increaseScore = function(){
   currentScore++;
   d3.select(".current span").text(currentScore);
@@ -69,6 +107,9 @@ setInterval(increaseScore, 50);
 
 randomizeEnemies();
       
+
+
+// Euclid function:
 var merge = function(array1, array2, callback){     
   var mergedArr = [];    
     for(var i = 0; i < array1.length; i++){
