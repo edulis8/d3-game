@@ -80,11 +80,21 @@ var update = function(data){
   // all enemy nodes will get attach to a piece of data. enemy1 | "gray"
   //d3.selectAll(".enemies").data(data);
   //console.log('enemies', enemies);
-  d3.selectAll(".enemies").data(data).style("fill", function(d){console.log(arguments); return d});
+  d3.selectAll("ellipse").data(colors).style("fill", function(d){console.log(arguments); return d});
 }
 setInterval(function(){
-  update(colors);
+  update(d3.shuffle(colors));
 }, 1000);
+
+enemies[0].data(["green"]);
+
+
+enemies[0].style('fill', function(d){return d});
+
+ //d3.selectAll("ellipse").data(colors);
+
+ // d3.selectAll("ellipse").style("fill", function(d){console.log(arguments); return d});
+
 // For using data:
 // var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 //---
