@@ -78,9 +78,13 @@ var randomizeEnemies = function(){
 var colors = ["gray", "fuchsia", "mediumseagreen", "orangered", "orchid", "papayawhip", "lime", "oldlace", "darkkhaki", "teal"];
 var update = function(data){
   // all enemy nodes will get attach to a piece of data. enemy1 | "gray"
-  var enemies = d3.selectAll(".enemies").data(data, function(d){ return d;});
-
+  //d3.selectAll(".enemies").data(data);
+  //console.log('enemies', enemies);
+  d3.selectAll(".enemies").data(data).style("fill", function(d){console.log(arguments); return d});
 }
+setInterval(function(){
+  update(colors);
+}, 1000);
 // For using data:
 // var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 //---
