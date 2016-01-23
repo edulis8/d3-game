@@ -11,7 +11,7 @@ var drag = d3.behavior.drag().on("drag", dragmove);
 var height = 500;
 var width = 500;
 // Player
-d3.select('.gameBoard').append("svg").attr("width", width).attr("height", height).style("background", "ghostwhite").append("circle").attr("cx", 250).attr("cy", 250).attr("r", 20).attr("class", "draggable player").style("fill", "blue").call(drag);
+var player = d3.select('.gameBoard').append("svg").attr("width", width).attr("height", height).style("background", "ghostwhite").append("circle").attr("cx", 250).attr("cy", 250).attr("r", 20).attr("class", "draggable player").style("fill", "blue").call(drag);
 
 var enemies = [];
 
@@ -29,13 +29,70 @@ var randomizeEnemies = function(){
    for(var i = 0; i < enemies.length; i++){
     var cy = Math.random() * height;
     var cx = Math.random() * width;
-    enemies[i].transition().duration(500).attr("cx", cx).attr("cy", cy);
+    enemies[i].transition()
+      .duration(500)
+      .attr("cx", cx).attr("cy", cy)
+      .tween('custom', function(){
+        return function(){
+          var enemyCoord = [parseFloat(d3.select(this).attr('cx')), parseFloat(d3.select(this).attr('cy'))];
+          var playerCoord = [parseFloat(player.attr('cx')), parseFloat(player.attr('cy'))];
+          if(euclid(enemyCoord, playerCoord) < 40){
+            //reset score
+            d3.select("body").transition().duration(100).style({"background": "red"});
+          }
+           d3.select("body").style({"background": "white"});
+
+        };
+      }); 
   }
   
 setTimeout(randomizeEnemies, 1000);
 }; 
 
 randomizeEnemies();
+
+// enemies[0].transition().duration(500).attr("cx", 0).attr("cy", 0).tween('custom', function(){
+//   return function(t){
+//   //console.log(d3.select(this).attr('cx'));
+//   //console.log(player.attr('cx'));
+    
+//   };
+// });
+
+
+       
+ var merge = function(array1, array2, callback){     
+  var mergedArr = [];    
+    for(var i = 0; i < array1.length; i++){
+     mergedArr.push(callback(array1[i], array2[i]));
+    }
+    return mergedArr;
+};      
+
+ var euclid = function(coords1, coords2){
+  var squaredDeltas = merge(coords1, coords2, function(a,b){
+    return Math.abs((a-b)*(a-b));
+   });
+
+  var answer = Math.sqrt(squaredDeltas[0] + squaredDeltas[1]);
+
+    return answer;
+  };
+
+
+
+  
+
+//
+
+// d3.select('.gameBoard').transition().tween("text", function() {
+//   var i = d3.interpolateRound(0, 100);
+//   console.log(i)
+//   return function(t) {
+//     console.log('t', t)
+//     this.textContent = (t);
+//   };
+// });
  
   // d3.selectAll('svg').each(function(){
   //   var cy = Math.random() * height;
