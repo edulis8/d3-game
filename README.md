@@ -1,6 +1,6 @@
 # Watchout
 =================
-I completed this project with a pair when I was a student at Hack Reactor Remote.
+I completed this project with a pair when I was a student at [Hack Reactor Remote](http://www.hackreactor.com/remote-beta/).
 
 An arcade game that relies on the animation power of the D3 library and taught me about the underlying concepts surrounding render and animation in the browser.
 
